@@ -7,12 +7,19 @@ from langchain.vectorstores import FAISS
 from langchain.embeddings import HuggingFaceEmbeddings
 import sys
 
+from langchain.callbacks.base import BaseCallbackHandler
+
+class PrintHandler(BaseCallbackHandler):
+    def on_llm_new_token(self, token: str, **kwargs):
+        print(token, end="", flush=True)
+
 # Step 1: 定义 LLM (替换成你自己的 sglang endpoint)
 llm = ChatOpenAI(
     model="deepseek-r1",
     openai_api_base="http://localhost:30000/v1",  # sglang 的 API 地址
     openai_api_key="none",  # 如果不需要认证，填个 dummy 即可
     streaming=True,  # 开启流式返回
+    callbacks=[PrintHandler()],  # 添加回调处理器
 )
 
 # Step 2: 建立向量数据库 (以 FAISS + HuggingFace embedding 为例)
@@ -53,10 +60,19 @@ while True:
 
         # 调用 qa_chain.run() 来获取响应
         # response = qa_chain.invoke(question)
-        print("AI:", end="")
-        for chunk in qa_chain.stream({"input": question}):
-            print(chunk, end="", flush=True)
-        print("")
+        print("AI:", end="", flush=True)
+        qa_chain.invoke(question)
+        print("")  # 换行
+        
+        # for chunk in qa_chain.stream({"input": question}):
+        #     # print(chunk["content"], end="", flush=True)
+        #     print(chunk["response"], end="", flush=True)
+        # print("")
+        
+        # for chunk in qa_chain.stream({"input": question}):
+        #     # print(chunk["content"], end="", flush=True)
+        #     print(chunk["response"], end="", flush=True)
+        # print("")
         # 打印 AI 的响应
 
     except EOFError:
