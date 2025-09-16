@@ -52,10 +52,12 @@ while True:
             break
 
         # 调用 qa_chain.run() 来获取响应
-        response = qa_chain.invoke(question)
-
+        # response = qa_chain.invoke(question)
+        print("AI:", end="")
+        for chunk in qa_chain.stream({"input": question}):
+            print(chunk, end="", flush=True)
+        print("")
         # 打印 AI 的响应
-        print("AI:", response)
 
     except EOFError:
         # 处理在命令行中按 Ctrl+D (Unix/Linux) 或 Ctrl+Z (Windows) 的情况
