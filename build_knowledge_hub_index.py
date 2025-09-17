@@ -51,7 +51,7 @@ def main():
                         continue
 
                     page_chunks = [
-                        f"以下是文件名为 {fname} 中的内容: {chunk}"
+                        f"以下是文件名为 {fname} 中的内容: '{chunk}'"
                         for chunk in page_chunks
                     ]
 

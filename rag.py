@@ -48,10 +48,6 @@ qa_chain = ConversationalRetrievalChain.from_llm(
     memory=memory
 )
 
-# qa_chain = ConversationChain(
-#     llm=llm, memory=memory
-# )  # 如果没有向量数据库，可以先用简单的对话链测试
-
 
 while True:
     try:
