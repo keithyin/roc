@@ -23,7 +23,7 @@ def main():
     )
     """
     hf_embedding = HuggingFaceEmbeddings(
-        model_name="/data-slow/llm-models/sentence-embedding-models/all-MiniLM-L6-v2",
+        model_name="/data-slow/llm-models/sentence-embedding-models/bge-large-zh-v1.5",
         model_kwargs={"device": "cuda"},
         encode_kwargs={"normalize_embeddings": True},  # 常用设置，提升检索效果
     )
