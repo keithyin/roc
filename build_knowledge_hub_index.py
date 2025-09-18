@@ -30,6 +30,9 @@ def main():
 
     vectorstore = None
 
+    all_page_chunks = []
+    all_meta_datas = []
+
     with tqdm(glob(data_regex), desc="processing files") as pbar_files:
 
         for file in pbar_files:
@@ -55,18 +58,16 @@ def main():
                         for chunk in page_chunks
                     ]
 
-                    batch_vs = FAISS.from_texts(
-                        texts=page_chunks,
-                        embedding=hf_embedding,
-                        metadatas=[{"page": i + 1, "fname": fname}] * len(page_chunks),
+                    all_page_chunks.extend(page_chunks)
+                    all_meta_datas.extend(
+                        [{"page": i + 1, "fname": fname}] * len(page_chunks)
                     )
 
-                    if vectorstore is None:
-                        vectorstore = batch_vs
-
-                    else:
-                        vectorstore = vectorstore.merge_from(batch_vs)
-
+    vectorstore = FAISS.from_texts(
+        texts=all_page_chunks,
+        embedding=hf_embedding,
+        metadatas=all_meta_datas,
+    )
     vectorstore.save_local("/data-slow/knowledge-hub/QS_index")
 
 
