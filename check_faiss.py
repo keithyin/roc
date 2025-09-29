@@ -17,7 +17,7 @@ vectorstore = FAISS.load_local(
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
 
 
-query = ["公司地址"]
+query = ["推荐的样本纯化方式"]
 results = retriever.get_relevant_documents(query=query[0])
 for r in results:
     print(f"metadata:{r.metadata}")
